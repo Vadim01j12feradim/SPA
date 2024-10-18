@@ -1,3 +1,4 @@
+import { Picker } from '@react-native-picker/picker';
 import { useState, type PropsWithChildren, type ReactElement } from 'react';
 import { Linking, StyleSheet, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
 
@@ -19,6 +20,7 @@ export default function ParallaxScrollView({
   };
 
   const [selected, setSelected] = useState(false)
+  const [selectedValue, setSelectedValue] = useState("java");
 
   return (
 
@@ -41,13 +43,26 @@ export default function ParallaxScrollView({
         </TouchableOpacity>
 
         <TouchableOpacity onPress={()=>setSelected(!selected)}>
-      <Text style={styles.linkText}>Click here to visit Example.com</Text>
+      <Text style={styles.linkText}>Registrate aqui</Text>
     </TouchableOpacity>
 
       </View>
       ):(
         <View style={styles.card}>
         <Text style={styles.title}>Registrese en el sistema</Text>
+      <Text style={styles.label}>Tipo de Usuario:</Text>
+        <View style={styles.container}>
+      <Picker
+        selectedValue={selectedValue}
+        style={styles.picker}
+        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+      >
+        <Picker.Item label="Usuario que ve todos los vehiculos" value="1" />
+        <Picker.Item label="Usuario que ve sus vehiculos" value="2" />
+      </Picker>
+      {/* <Text style={styles.selectedText}>Selected: {selectedValue}</Text> */}
+    </View>
+
         <TextInput
           style={styles.input}
           placeholder="Usuario"
@@ -77,6 +92,24 @@ export default function ParallaxScrollView({
 }
 
 const styles = StyleSheet.create({
+  label: {
+    fontSize: 18,
+    marginBottom: 10,
+    alignContent:'flex-start',
+    alignItems: 'flex-start',
+    textAlign: 'left'
+  },
+  picker: {
+    height: 50,
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  selectedText: {
+    fontSize: 16,
+  },
   linkText: {
     marginTop:20,
     color: 'blue',
