@@ -19,7 +19,7 @@ export default function ParallaxScrollView({
     console.log("Login pressed");
   };
 
-  
+
   const [selected, setSelected] = useState(false)
   const [selectedValue, setSelectedValue] = useState("1");
   
