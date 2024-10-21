@@ -1,7 +1,7 @@
 import { Picker } from '@react-native-picker/picker';
 import { useState, type PropsWithChildren, type ReactElement } from 'react';
 import { Linking, StyleSheet, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
-
+import axios from 'axios';
 const HEADER_HEIGHT = 250;
 
 type Props = PropsWithChildren<{
@@ -19,8 +19,31 @@ export default function ParallaxScrollView({
     console.log("Login pressed");
   };
 
+  
   const [selected, setSelected] = useState(false)
-  const [selectedValue, setSelectedValue] = useState("java");
+  const [selectedValue, setSelectedValue] = useState("1");
+  
+  const [password, setPassword] = useState("")
+  const [username, setUsername] = useState("")
+  const [passwordRepeat, setPasswordRepeat] = useState("")
+  
+  const register = () =>{
+    if (password == passwordRepeat && password.trim() != ""){
+      const data = {username,password, selectedValue}
+      console.log(data);
+      
+      const config = {
+        headers: {
+          'Authorization': 'Bearer your_token',
+          'Content-Type': 'application/json'
+        },
+        timeout: 5000  // Tiempo máximo en milisegundos para esperar la respuesta
+      };
+      
+      // Realiza una solicitud POST con configuración
+    
+    }
+  }
 
   return (
 
@@ -65,20 +88,29 @@ export default function ParallaxScrollView({
 
         <TextInput
           style={styles.input}
+          value={username}
           placeholder="Usuario"
+          onChangeText={text => setUsername(text)}
         />
+
         <TextInput
           style={styles.input}
           placeholder="Contrasena"
           secureTextEntry
+          value={password}
+          onChangeText={text => setPassword(text)}
         />
+
         <TextInput
           style={styles.input}
           placeholder="Repita su contrasena"
           secureTextEntry
+          value={passwordRepeat}
+          onChangeText={text => setPasswordRepeat(text)}
         />
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Ingresar</Text>
+
+        <TouchableOpacity style={styles.button} onPress={register}>
+          <Text style={styles.buttonText}>Registrarse</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={()=>setSelected(!selected)}>
