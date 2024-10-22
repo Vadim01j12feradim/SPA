@@ -1,6 +1,8 @@
 import { Picker } from '@react-native-picker/picker';
 import { useState, type PropsWithChildren, type ReactElement } from 'react';
 import { Linking, StyleSheet, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
+import axios from 'axios';
+const url = "http://localhost:3000/"
 
 const HEADER_HEIGHT = 250;
 
@@ -14,13 +16,86 @@ export default function ParallaxScrollView({
   headerImage,
   headerBackgroundColor,
 }: Props) {
-  const handleLogin = () => {
-    // Handle login logic here
-    console.log("Login pressed");
-  };
+ 
 
   const [selected, setSelected] = useState(false)
-  const [selectedValue, setSelectedValue] = useState("java");
+  const [role, setRole] = useState("1");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordR, setPasswordR] = useState("");
+
+  const handleLogin = () => {
+
+    if (username.trim().length > 6 && password.trim().length >6) {
+      const urlTmp = url+'items?username='+username+"&password="+password
+      console.log(urlTmp);
+      
+      axios.get(urlTmp)
+    .then(response => {
+      const res = response.data
+      console.log(res);
+      switch (res.code) {
+        case 200:
+          alert("User Found");
+          
+          break;
+        case 300:
+          alert("User not found");
+          
+          break;
+      
+        default:
+          break;
+      }
+    })
+    .catch(error => {
+        console.error('Error posting data:', error.response ? error.response.data : error.message); // Handle the error
+    });
+
+      
+    }else{
+      alert("Datos no validos")
+    }
+  };
+
+  const saveUser = ()=>{
+    if (password == passwordR && password.trim().length > 4 && username.trim().length > 5){
+      const data = {password, username,role}
+      console.log(data);
+
+      axios.post(url+'items', data, {
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer your_token_here'
+          }
+      })
+      .then(response => {
+        const res = response.data
+        console.log(res.code);
+        switch (res.code) {
+          case 200:
+            alert("Usuario created");
+            setSelected(true)
+            break;
+          case 300:
+            alert("El usuario ya existe");
+            
+            break;
+        
+          default:
+            break;
+        }
+      })
+      .catch(error => {
+          console.error('Error posting data:', error.response ? error.response.data : error.message); // Handle the error
+      });
+    
+      
+    }else{
+      console.log("Datos no validos");
+      
+    }
+  }
 
   return (
 
@@ -32,12 +107,16 @@ export default function ParallaxScrollView({
         <TextInput
           style={styles.input}
           placeholder="Usuario"
+          value={username}
+          onChangeText={text => setUsername(text)}
         />
         <TextInput
           style={styles.input}
           placeholder="Contrasena"
           secureTextEntry
-        />
+          value={password}
+          onChangeText={text => setPassword(text)} />
+
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Ingresar</Text>
         </TouchableOpacity>
@@ -53,9 +132,9 @@ export default function ParallaxScrollView({
       <Text style={styles.label}>Tipo de Usuario:</Text>
         <View style={styles.container}>
       <Picker
-        selectedValue={selectedValue}
+        selectedValue={role}
         style={styles.picker}
-        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+        onValueChange={(itemValue, itemIndex) => setRole(itemValue)}
       >
         <Picker.Item label="Usuario que ve todos los vehiculos" value="1" />
         <Picker.Item label="Usuario que ve sus vehiculos" value="2" />
@@ -66,18 +145,24 @@ export default function ParallaxScrollView({
         <TextInput
           style={styles.input}
           placeholder="Usuario"
+          value={username}
+          onChangeText={text => setUsername(text)}
         />
         <TextInput
           style={styles.input}
           placeholder="Contrasena"
           secureTextEntry
+          value={password}
+          onChangeText={text=>setPassword(text)}
         />
         <TextInput
           style={styles.input}
           placeholder="Repita su contrasena"
           secureTextEntry
+          value={passwordR}
+          onChangeText={text=>setPasswordR(text)}
         />
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <TouchableOpacity style={styles.button} onPress={saveUser}>
           <Text style={styles.buttonText}>Ingresar</Text>
         </TouchableOpacity>
 
