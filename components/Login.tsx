@@ -1,7 +1,12 @@
 import { Picker } from '@react-native-picker/picker';
 import { useState, type PropsWithChildren, type ReactElement } from 'react';
-import { Linking, StyleSheet, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
+import {StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import storeSession  from "../utils/storeSession";
+import CarMapScreen from './CarMapScreen';
+import { APIProvider } from "@vis.gl/react-google-maps";
+
 import axios from 'axios';
+import { Link, Route, useNavigate } from 'react-router-dom';
 const url = "http://localhost:3000/"
 
 const HEADER_HEIGHT = 250;
@@ -23,25 +28,28 @@ export default function ParallaxScrollView({
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordR, setPasswordR] = useState("");
-
+ 
   const handleLogin = () => {
 
     if (username.trim().length > 6 && password.trim().length >6) {
       const urlTmp = url+'items?username='+username+"&password="+password
-      console.log(urlTmp);
       
-      axios.get(urlTmp)
-    .then(response => {
+    axios.get(urlTmp)
+    .then( async response => {  
       const res = response.data
-      console.log(res);
+      
       switch (res.code) {
         case 200:
-          alert("User Found");
+   
+          await storeSession.storeSession(res.data)
+
+          // const data = await storeSession.getSession() 
+          // console.log(data);
           
+
           break;
         case 300:
-          alert("User not found");
-          
+          alert("Credenciales no validas");
           break;
       
         default:
@@ -98,8 +106,8 @@ export default function ParallaxScrollView({
   }
 
   return (
-
     <View style={styles.container}>
+
       {selected ? (
 
       <View style={styles.card}>
@@ -172,6 +180,7 @@ export default function ParallaxScrollView({
 
       </View>
       )}
+      
     </View>
   );
 }
