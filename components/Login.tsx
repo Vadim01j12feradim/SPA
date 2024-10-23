@@ -1,5 +1,6 @@
 import { Picker } from '@react-native-picker/picker';
 import { useState, type PropsWithChildren, type ReactElement } from 'react';
+<<<<<<< HEAD
 import {StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import storeSession  from "../utils/storeSession";
 import CarMapScreen from './CarMapScreen';
@@ -9,6 +10,10 @@ import axios from 'axios';
 import { Link, Route, useNavigate } from 'react-router-dom';
 const url = "http://localhost:3000/"
 
+=======
+import { Linking, StyleSheet, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
+import axios from 'axios';
+>>>>>>> 8f58efac4bf444dd8c091c9b88a5cb0eafe848ee
 const HEADER_HEIGHT = 250;
 
 type Props = PropsWithChildren<{
@@ -23,7 +28,9 @@ export default function ParallaxScrollView({
 }: Props) {
  
 
+
   const [selected, setSelected] = useState(false)
+<<<<<<< HEAD
   const [role, setRole] = useState("1");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -102,6 +109,29 @@ export default function ParallaxScrollView({
     }else{
       console.log("Datos no validos");
       
+=======
+  const [selectedValue, setSelectedValue] = useState("1");
+  
+  const [password, setPassword] = useState("")
+  const [username, setUsername] = useState("")
+  const [passwordRepeat, setPasswordRepeat] = useState("")
+  
+  const register = () =>{
+    if (password == passwordRepeat && password.trim() != ""){
+      const data = {username,password, selectedValue}
+      console.log(data);
+      
+      const config = {
+        headers: {
+          'Authorization': 'Bearer your_token',
+          'Content-Type': 'application/json'
+        },
+        timeout: 5000  // Tiempo máximo en milisegundos para esperar la respuesta
+      };
+      
+      // Realiza una solicitud POST con configuración
+    
+>>>>>>> 8f58efac4bf444dd8c091c9b88a5cb0eafe848ee
     }
   }
 
@@ -152,26 +182,45 @@ export default function ParallaxScrollView({
 
         <TextInput
           style={styles.input}
-          placeholder="Usuario"
           value={username}
+          placeholder="Usuario"
+<<<<<<< HEAD
+          value={username}
+=======
+>>>>>>> 8f58efac4bf444dd8c091c9b88a5cb0eafe848ee
           onChangeText={text => setUsername(text)}
         />
+
         <TextInput
           style={styles.input}
           placeholder="Contrasena"
           secureTextEntry
           value={password}
+<<<<<<< HEAD
           onChangeText={text=>setPassword(text)}
+=======
+          onChangeText={text => setPassword(text)}
+>>>>>>> 8f58efac4bf444dd8c091c9b88a5cb0eafe848ee
         />
+
         <TextInput
           style={styles.input}
           placeholder="Repita su contrasena"
           secureTextEntry
+<<<<<<< HEAD
           value={passwordR}
           onChangeText={text=>setPasswordR(text)}
         />
         <TouchableOpacity style={styles.button} onPress={saveUser}>
           <Text style={styles.buttonText}>Ingresar</Text>
+=======
+          value={passwordRepeat}
+          onChangeText={text => setPasswordRepeat(text)}
+        />
+
+        <TouchableOpacity style={styles.button} onPress={register}>
+          <Text style={styles.buttonText}>Registrarse</Text>
+>>>>>>> 8f58efac4bf444dd8c091c9b88a5cb0eafe848ee
         </TouchableOpacity>
 
         <TouchableOpacity onPress={()=>setSelected(!selected)}>
